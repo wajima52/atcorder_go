@@ -5,46 +5,6 @@ import (
 	"testing"
 )
 
-func Test_validInput(t *testing.T) {
-	type args struct {
-		inputs []string
-	}
-	tests := []struct {
-		name string
-		args args
-		want bool
-	}{
-		{
-			name: "正常な場合",
-			args: args{
-				inputs: []string{"1", "2", "3", "0004"},
-			},
-			want: true,
-		},
-		{
-			name: "inputに数値ではない文字が含まれる場合",
-			args: args{
-				inputs: []string{"1", "2", "3", "0004a"},
-			},
-			want: false,
-		},
-		{
-			name: "inputの長さが1未満の場合",
-			args: args{
-				inputs: []string{},
-			},
-			want: false,
-		},
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			if got := validInput(tt.args.inputs); got != tt.want {
-				t.Errorf("validInput() = %v, want %v", got, tt.want)
-			}
-		})
-	}
-}
-
 func TestSortInputs(t *testing.T) {
 	type args struct {
 		inputs []string
@@ -87,6 +47,60 @@ func TestSortInputs(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			if got := SortInputs(tt.args.inputs); !reflect.DeepEqual(got, tt.want) {
 				t.Errorf("SortInputs() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func Test_validInput(t *testing.T) {
+	type args struct {
+		inputs []string
+	}
+	tests := []struct {
+		name    string
+		args    args
+		wantErr bool
+	}{
+		{
+			name: "正常な場合",
+			args: args{
+				inputs: []string{"1", "2", "3", "0004"},
+			},
+			wantErr: false,
+		},
+		{
+			name: "正常な場合_入力例2",
+			args: args{
+				inputs: []string{
+					"1111111111111111111111",
+					"00011111111111111111111",
+					"000000111111111111111111",
+					"0000000001111111111111111",
+					"00000000000011111111111111",
+					"000000000000000111111111111",
+				},
+			},
+			wantErr: false,
+		},
+		{
+			name: "inputに数値ではない文字が含まれる場合",
+			args: args{
+				inputs: []string{"1", "2", "3", "0004a"},
+			},
+			wantErr: true,
+		},
+		{
+			name: "inputの長さが1未満の場合",
+			args: args{
+				inputs: []string{},
+			},
+			wantErr: true,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if err := validInput(tt.args.inputs); (err != nil) != tt.wantErr {
+				t.Errorf("validInput() error = %v, wantErr %v", err, tt.wantErr)
 			}
 		})
 	}
