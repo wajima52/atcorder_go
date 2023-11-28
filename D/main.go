@@ -33,7 +33,10 @@ func main() {
 		fmt.Println(err)
 		return
 	}
-	fmt.Println(SortInputs(inputs))
+	outputs := SortInputs(inputs)
+	for _, output := range outputs {
+		fmt.Println(output)
+	}
 }
 
 func validInput(inputs []string) error {
